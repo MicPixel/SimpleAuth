@@ -20,3 +20,8 @@ messages:
   change-password-usage: '<red>Usage: <yellow>/changepassword <old password> <new password> <new password>'
   changing-password: <yellow>Changing password...
   password-changed: <red>Your password has been changed!
+  unregister-usage: '<red>Usage: <yellow>/unregister <username>'
+  unregister-success: <green>Successfully unregistered <username>!
+  unregister-not-registered: <red>This user is not registered!
+  unregister-error: <red>An error occurred while unregistering the player.
+  kick-message: <red>You have been unregistered by an administrator.

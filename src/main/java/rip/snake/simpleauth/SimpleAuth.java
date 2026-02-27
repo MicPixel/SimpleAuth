@@ -9,10 +9,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import lombok.Getter;
 import org.slf4j.Logger;
-import rip.snake.simpleauth.commands.ChangePassCommand;
-import rip.snake.simpleauth.commands.LobbyCommand;
-import rip.snake.simpleauth.commands.LoginCommand;
-import rip.snake.simpleauth.commands.RegisterCommand;
+import rip.snake.simpleauth.commands.*;
 import rip.snake.simpleauth.listeners.ChatListener;
 import rip.snake.simpleauth.listeners.ConnectionListener;
 import rip.snake.simpleauth.listeners.MessagesListener;
@@ -69,6 +66,7 @@ public class SimpleAuth {
         proxyServer.getCommandManager().register("register", new RegisterCommand(this));
         proxyServer.getCommandManager().register("changepassword", new ChangePassCommand(this), "changepass", "changepassword");
         proxyServer.getCommandManager().register("lobby", new LobbyCommand(this), "hub", "leave", "l");
+        proxyServer.getCommandManager().register("unregister", new UnregisterCommand(this), "removeregister");
     }
 
     public YamlDocument getConfig() {
