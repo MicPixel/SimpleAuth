@@ -42,6 +42,10 @@ shadowJar {
     archiveVersion.set("${project.version}")
 }
 
+build {
+    dependsOn shadowJar
+}
+
 def targetJavaVersion = 11
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)
