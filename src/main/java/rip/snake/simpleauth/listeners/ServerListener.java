@@ -51,7 +51,7 @@ public class ServerListener {
 
         if (tPlayer.isNeedAuth() && !tPlayer.isLoggedIn()) {
             event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(simpleAuth.getMessages().getString(
-                    tPlayer.isRegistered() ? "messages.not-logged-in" : "messages.not-registered",
+                    tPlayer.isAuthenticated() ? "messages.not-logged-in" : "messages.not-registered",
                     "<red>You are not logged in!"
             )));
         }
@@ -76,7 +76,7 @@ public class ServerListener {
             }
 
             event.getPlayer().sendMessage(MiniMessage.miniMessage().deserialize(simpleAuth.getMessages().getString(
-                    tPlayer.isRegistered() ? "messages.not-logged-in" : "messages.not-registered",
+                    tPlayer.isAuthenticated() ? "messages.not-logged-in" : "messages.not-registered",
                     "<red>You are not logged in!"
             )));
             event.setResult(ServerPreConnectEvent.ServerResult.denied());
