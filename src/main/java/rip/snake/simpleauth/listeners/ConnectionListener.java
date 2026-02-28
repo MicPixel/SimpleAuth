@@ -107,8 +107,20 @@ public class ConnectionListener {
             tPlayer.setAuthenticated(true);
             tPlayer.setLoggedIn(true);
             tPlayer.setNeedAuth(false);
+            tPlayer.setLastDisconnectTime(0); // Reset in case they had a previous session
             simpleAuth.getLogger().info("[{}] The player is premium, and bypassed auth.", username);
         } else {
+            // Check for active session
+            if (tPlayer.isLoggedIn() && tPlayer.getLastIp() != null) {
+                String currentIp = event.getPlayer().getRemoteAddress().getAddress().getHostAddress();
+                if (currentIp.equals(tPlayer.getLastIp())) {
+                    tPlayer.setNeedAuth(false);
+                    tPlayer.setLastDisconnectTime(0); // Mark as active
+                    simpleAuth.getLogger().info("[{}] Session resumed (IP matched).", username);
+                    return;
+                }
+            }
+
             // They are offline mode (cracked), need to register/login in auth server.
             tPlayer.setAuthenticated(false);
             tPlayer.setLoggedIn(false);
@@ -121,6 +133,17 @@ public class ConnectionListener {
     public void onQuit(DisconnectEvent event) {
         String username = event.getPlayer().getUsername().toLowerCase();
         simpleAuth.getLogger().info("[{}] Disconnected", username);
+        
+        // Save session data
+        TPlayer tPlayer = PlayerManager.GET_TMP_PLAYER(username);
+        if (tPlayer.isLoggedIn()) {
+            tPlayer.setLastDisconnectTime(System.currentTimeMillis());
+            tPlayer.setLastIp(event.getPlayer().getRemoteAddress().getAddress().getHostAddress());
+        } else {
+            // Not logged in, remove completely to avoid memory leaks
+            PlayerManager.REMOVE_TMP_PLAYER(username);
+        }
+
         PlayerManager.REMOVE_PLAYER(event.getPlayer().getUniqueId(), username);
 
         // Note: We deliberately DO NOT remove them from pendingPremiumChecks here.

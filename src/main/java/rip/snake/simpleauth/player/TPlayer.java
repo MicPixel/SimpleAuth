@@ -17,6 +17,8 @@ public class TPlayer {
     private int attempts;
 
     private RegisteredServer server;
+    private long lastDisconnectTime;
+    private String lastIp;
 
     public boolean attempt() {
         return attempts++ >= 3;

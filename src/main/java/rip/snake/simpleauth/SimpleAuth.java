@@ -16,9 +16,11 @@ import rip.snake.simpleauth.listeners.MessagesListener;
 import rip.snake.simpleauth.listeners.ServerListener;
 import rip.snake.simpleauth.managers.MongoManager;
 import rip.snake.simpleauth.managers.ServersManager;
+import rip.snake.simpleauth.tasks.SessionCleanupTask;
 import rip.snake.simpleauth.utils.ConfigCreator;
 
 import java.nio.file.Path;
+import java.util.concurrent.TimeUnit;
 
 @Plugin(
         id = "simple-auth",
@@ -67,6 +69,12 @@ public class SimpleAuth {
         proxyServer.getCommandManager().register("changepassword", new ChangePassCommand(this), "changepass", "changepassword");
         proxyServer.getCommandManager().register("lobby", new LobbyCommand(this), "hub", "leave", "l");
         proxyServer.getCommandManager().register("unregister", new UnregisterCommand(this), "removeregister");
+
+        // Registering tasks
+        proxyServer.getScheduler()
+                .buildTask(this, new SessionCleanupTask())
+                .repeat(1, TimeUnit.MINUTES)
+                .schedule();
     }
 
     public YamlDocument getConfig() {
