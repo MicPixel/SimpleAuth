@@ -28,6 +28,30 @@ SimpleAuth is a lightweight and effective authentication plugin for the Velocity
 1. Players will be prompted to `/register <password> <password>` when they first join.
 2. Upon subsequent joins, players must `/login <password>`.
 
+## Developer API: Sending Captcha
+
+If you are generating captchas on your backend auth server and want to send them to SimpleAuth, you can do so using plugin messaging channels.
+
+1. Register the outgoing plugin channel `simple-auth:captcha` on your backend server (e.g., Spigot/Paper).
+2. Send a plugin message to the proxy using this channel with the following data:
+   - `UTF-8 String`: The player's username (case-insensitive, but usually lowercase).
+   - `UTF-8 String`: The generated captcha string.
+
+Example in Bukkit/Spigot:
+
+```java
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
+
+// ...
+
+ByteArrayDataOutput out = ByteStreams.newDataOutput();
+out.writeUTF(player.getName().toLowerCase());
+out.writeUTF(captchaString);
+
+player.sendPluginMessage(plugin, "simple-auth:captcha", out.toByteArray());
+```
+
 ## Configuration
 
 A sample configuration can be found in `plugins/SimpleAuth/config.yml`. Here are the primary options:
